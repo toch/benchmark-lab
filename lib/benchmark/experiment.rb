@@ -1,4 +1,5 @@
 require 'benchmark'
+require 'benchmark/experiment/descriptive_statistics'
 require 'benchmark/experiment/version'
 
 module Benchmark
