@@ -1,5 +1,6 @@
 require 'benchmark'
 require 'benchmark/experiment/descriptive_statistics'
+require 'benchmark/experiment/mann_whitney_u_test'
 require 'benchmark/experiment/version'
 
 module Benchmark
