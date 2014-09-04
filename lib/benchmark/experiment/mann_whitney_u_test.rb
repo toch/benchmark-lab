@@ -1,3 +1,4 @@
+require 'distribution'
 
 module Benchmark
   module Experiment
@@ -40,6 +41,12 @@ module Benchmark
         end
 
         (u - mu_u) / sigma_u
+      end
+
+      def self.calculate_probability_z(z, two_sided=true)
+        prob = (1.0 - Distribution::Normal.cdf(z.abs()))
+        prob *= 2.0 if two_sided
+        prob
       end
 
       private

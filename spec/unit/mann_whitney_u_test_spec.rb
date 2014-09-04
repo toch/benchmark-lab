@@ -28,5 +28,10 @@ describe Benchmark::Experiment::MannWhitneyUTest do
   it 'calculates the standardized value z with ties' do
     Benchmark::Experiment::MannWhitneyUTest::calculate_z(x, y_ties).must_be_close_to -1.853
   end
+
+  it 'calculates p-value' do
+    z = Benchmark::Experiment::MannWhitneyUTest::calculate_z(x, y_no_ties)
+    Benchmark::Experiment::MannWhitneyUTest::calculate_probability_z(z).must_be_close_to 0.086
+  end
 end
 
