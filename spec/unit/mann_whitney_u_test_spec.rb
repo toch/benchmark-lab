@@ -33,5 +33,9 @@ describe Benchmark::Experiment::MannWhitneyUTest do
     z = Benchmark::Experiment::MannWhitneyUTest::calculate_z(x, y_no_ties)
     Benchmark::Experiment::MannWhitneyUTest::calculate_probability_z(z).must_be_close_to 0.086
   end
+
+  it 'rejects null hypothesis' do
+    refute Benchmark::Experiment::MannWhitneyUTest::is_null_hypothesis_rejected?(0.9, 0.05)
+  end
 end
 

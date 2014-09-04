@@ -49,6 +49,10 @@ module Benchmark
         prob
       end
 
+      def self.is_null_hypothesis_rejected?(pvalue, significance_level)
+        pvalue < significance_level
+      end
+
       private
 
       def self.ties?(x, y)
