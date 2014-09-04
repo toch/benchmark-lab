@@ -21,7 +21,39 @@ module Benchmark
         [u_x, u_y]
       end
 
+      def self.calculate_z(x, y)
+        n_x = x.size.to_f
+        n_y = y.size.to_f
+        n = n_x + n_y
+        n_xy = n_x * n_y
+
+        u = calculate_U(x, y).minmax.first.to_f
+
+        t = ties?(x, y)
+
+        mu_u = n_xy / 2.0
+
+        if !t.first
+          sigma_u = Math::sqrt(n_xy * (n + 1.0) / 12.0)
+        else
+          sigma_u = Math::sqrt( n_xy / (n * (n + 1)) * ((n**3 - n) / 12.0 - t.last))
+        end
+
+        (u - mu_u) / sigma_u
+      end
+
       private
+
+      def self.ties?(x, y)
+        all = x + y
+        ties = all.group_by { |e| e }.reject { |_, v| v.size < 2 }
+
+        found_ties = ties.size > 0
+        [
+          found_ties,
+          ties.inject(0) { |a, v| a + (v.size**3 - v.size) / 12.0}
+        ]
+      end
 
       def self.concatenate_and_label(x, y)
         ranked = []
