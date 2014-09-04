@@ -11,6 +11,10 @@ module Benchmark
         @third_quartile = calculate_third_quartile_of(@sample)
       end
 
+      def sample
+        @sample
+      end
+
       def sample_size
         @sample.size
       end

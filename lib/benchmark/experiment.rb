@@ -28,7 +28,7 @@ module Benchmark
         end
       end
 
-      stats = []
+      stats = {}
 
       times_to_measure = [
         :utime,
@@ -41,14 +41,23 @@ module Benchmark
       print "\tuser     system      total        real\n"
 
       job.list.each do |label, item, sample|
-        stats << {}
+        stats[label] = {}
         print label.ljust(width)
         times_to_measure.each do |t|
-          stats.last[t] = DescriptiveStatistics.new(sample.map(&t)).tap do |result|
+          stats[label][t] = DescriptiveStatistics.new(sample.map(&t)).tap do |result|
             print "\t[#{'%.2f' % result.first_quartile},#{'%.2f' % result.median},#{'%.2f' % result.third_quartile}]"
           end
         end
         print "\n"
+      end
+
+      ranked = stats.sort_by { |_, elem| elem[:total].median }
+
+      if (stats.size > 1)
+        z = Benchmark::Experiment::MannWhitneyUTest::calculate_z(ranked.first.last[:total].sample, ranked[1].last[:total].sample)
+        p_value = Benchmark::Experiment::MannWhitneyUTest::calculate_probability_z(z)
+
+        puts "The best #{ranked.first.first} is #{Benchmark::Experiment::MannWhitneyUTest::is_null_hypothesis_rejected?(p_value, 0.05) ? "" : "not"} significantly (95%) better (total time)."
       end
 
       stats
