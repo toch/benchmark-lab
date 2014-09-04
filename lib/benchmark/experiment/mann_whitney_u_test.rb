@@ -18,7 +18,7 @@ module Benchmark
         u_x = calculate_u_sample(n_x, n_y, r_x)
         u_y = calculate_u_sample(n_y, n_x, r_y)
 
-        [u_x, u_y].minmax.first
+        [u_x, u_y]
       end
 
       private

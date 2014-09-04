@@ -10,7 +10,7 @@ describe Benchmark::Experiment::MannWhitneyUTest do
   }
 
   it 'calculates U' do
-    Benchmark::Experiment::MannWhitneyUTest::calculate_U(x, y).must_equal 4.0
+    Benchmark::Experiment::MannWhitneyUTest::calculate_U(x, y).must_equal [21.0, 4.0]
   end
 end
 
