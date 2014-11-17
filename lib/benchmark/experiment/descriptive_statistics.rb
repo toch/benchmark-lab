@@ -2,8 +2,9 @@
 module Benchmark
   module Experiment
     class DescriptiveStatistics
-      def initialize(sample)
+      def initialize(sample, name ='')
         # raise exception if empty sample
+        @name = name
         @sample = sample.sort
         @minimum, @maximum = @sample.minmax
         @median = calculate_median_of(@sample)
@@ -11,32 +12,10 @@ module Benchmark
         @third_quartile = calculate_third_quartile_of(@sample)
       end
 
-      def sample
-        @sample
-      end
+      attr_reader :name, :sample, :minimum, :maximum, :first_quartile, :third_quartile, :median
 
       def sample_size
-        @sample.size
-      end
-
-      def minimum
-        @minimum
-      end
-
-      def first_quartile
-        @first_quartile
-      end
-
-      def median
-        @median
-      end
-
-      def third_quartile
-        @third_quartile
-      end
-
-      def maximum
-        @maximum
+        sample.size
       end
 
       def interquartile_range

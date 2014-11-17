@@ -5,9 +5,15 @@ describe Benchmark::Experiment::DescriptiveStatistics do
     [49, 7, 6, 15, 43, 39, 47, 41, 42, 36, 40]
   }
 
+  let(:data_name) { 'Test' }
+
   subject {
-    Benchmark::Experiment::DescriptiveStatistics.new(sample)
+    Benchmark::Experiment::DescriptiveStatistics.new(sample, data_name)
   }
+
+  it 'returns the name of the data collected' do
+    subject.name.must_equal data_name
+  end
 
   it 'returns the sample size' do
     subject.sample_size.must_equal 11
