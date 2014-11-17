@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'benchmark/experiment/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'Benchmark Experiment'
+  spec.name          = 'benchmark-experiment'
   spec.version       = Benchmark::Experiment::VERSION
   spec.authors       = ['Christophe Philemotte']
   spec.email         = ['christophe.philemotte@8thcolor.com']
