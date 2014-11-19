@@ -12,10 +12,14 @@ describe Benchmark::Experiment do
 
   it 'prints a report for each run case.' do
     output_arr = []
-    output_arr << %r{\s+user\s+system\s+total\s+real\n}
+    output_arr << %r{\s+user\s+system\s+total\s+real\s+\n}
 
     cases.keys.each do |label|
-      output_arr << %r{#{label}\s+\[\d+\.\d+,\d+\.\d+,\d+\.\d+\]\s+\[\d+\.\d+,\d+\.\d+,\d+\.\d+\]\s+\[\d+\.\d+,\d+\.\d+,\d+\.\d+\]\s+\[\d+\.\d+,\d+\.\d+,\d+\.\d+\]\n}
+      output_arr << %r{#{label}}
+      4.times.each do
+        output_arr << %r{\s+\[\d+\.\d+,\d+\.\d+,\d+\.\d+\]}
+      end
+      output_arr << %r{\n}
     end
 
     output_regexp = output_arr.inject(//) { |o, r| Regexp.new(o.source + r.source) }

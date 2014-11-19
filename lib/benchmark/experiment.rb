@@ -81,25 +81,38 @@ module Benchmark
 
       job.benchmark(sample_size)
 
-      print "".ljust(width)
-      print "\tuser     system      total        real\n"
+      lines = []
+      spacing = [0] * MEASURED_TIMES.size
+      tab = ' ' * 4
 
       all_stats = []
 
       job.list.each do |label, _, _, stats|
-        print label.ljust(width)
+        line = ''
+        line << label.ljust(width)
 
         all_stats << stats
 
-        stats.each do |stat|
-          print "\t[#{'%.2f' % stat.first_quartile},#{'%.2f' % stat.median},#{'%.2f' % stat.third_quartile}]"
+        stats.each_with_index do |stat, index|
+          value = "#{tab}[#{'%.2f' % stat.first_quartile},#{'%.2f' % stat.median},#{'%.2f' % stat.third_quartile}]"
+          spacing[index] = [spacing[index], value.length].minmax.last
+          line << value
         end
-        print "\n"
+        line << "\n"
+        lines << line
       end
+
+      print "".ljust(width)
+      MEASURED_TIMES.values.each_with_index do |head, index|
+        print "#{tab}#{head}".ljust(spacing[index])
+      end
+      print "\n"
+
+      lines.each { |line| print line }
 
       best, is_the_best_significative = rank(all_stats)
 
-      puts "The best #{best} is #{is_the_best_significative ? "" : "not"} significantly (95%) better (total time)."
+      puts "The best \"#{best.name}\" is #{is_the_best_significative ? "" : "not "}significantly (95%) better (total time)."
 
       all_stats
     end
