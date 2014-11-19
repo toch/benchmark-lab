@@ -29,7 +29,7 @@ describe Benchmark::Experiment do
   end
 
   it 'returns an array with stats for each run case.' do
-    times = 2
+    times = 20
     results = Benchmark.experiment(times) do |x|
       cases.each { |label, blk| x.report(label, &blk) }
     end
