@@ -30,7 +30,7 @@ module Benchmark
 
   class Job
     alias old_item item
-    def item(label = "", &blk)
+    def item(label = '', &blk)
       old_item(label, &blk)
       @list.last << Sample.new
       @list.last << []
@@ -63,10 +63,10 @@ module Benchmark
 
     def rank(all_stats, alpha = 0.05)
       ranked = all_stats.map do |stats|
-        stats.select{ |stat| stat.name == :total }.first
+        stats.select { |stat| stat.name == :total }.first
       end.sort_by { |stat| stat.median }
       is_h0_rejected = true
-      if (all_stats.size > 1)
+      if all_stats.size > 1
         z = Benchmark::Experiment::MannWhitneyUTest::calculate_z(ranked.first.sample, ranked[1].sample)
         p_value = Benchmark::Experiment::MannWhitneyUTest::calculate_probability_z(z)
         is_h0_rejected = Benchmark::Experiment::MannWhitneyUTest::is_null_hypothesis_rejected?(p_value, alpha)
@@ -112,7 +112,7 @@ module Benchmark
         lines << line
       end
 
-      print "".ljust(width)
+      print ''.ljust(width)
       MEASURED_TIMES.values.each_with_index do |head, index|
         print "#{tab}#{head}".ljust(spacing[index])
       end
@@ -122,7 +122,7 @@ module Benchmark
 
       best, is_the_best_significative = rank(all_stats)
 
-      puts "The best \"#{best.name}\" is #{is_the_best_significative ? "" : "not "}significantly (95%) better (total time)."
+      puts "The best \"#{best.name}\" is #{is_the_best_significative ? '' : 'not '}significantly (95%) better (total time)."
 
       all_stats
     end

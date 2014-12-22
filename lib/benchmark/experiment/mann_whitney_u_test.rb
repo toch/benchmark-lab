@@ -5,7 +5,7 @@ module Benchmark
     module MannWhitneyUTest
       def self.calculate_U(x, y)
         ranked = concatenate_and_label(x, y)
-        
+
         rank!(ranked)
 
         adjust_ties!(ranked)
@@ -37,13 +37,13 @@ module Benchmark
         if !t.first
           sigma_u = Math::sqrt(n_xy * (n + 1.0) / 12.0)
         else
-          sigma_u = Math::sqrt( n_xy / (n * (n + 1)) * ((n**3 - n) / 12.0 - t.last))
+          sigma_u = Math::sqrt(n_xy / (n * (n + 1)) * ((n**3 - n) / 12.0 - t.last))
         end
 
         (u - mu_u) / sigma_u
       end
 
-      def self.calculate_probability_z(z, two_sided=true)
+      def self.calculate_probability_z(z, two_sided = true)
         prob = (1.0 - Distribution::Normal.cdf(z.abs()))
         prob *= 2.0 if two_sided
         prob
@@ -62,7 +62,7 @@ module Benchmark
         found_ties = ties.size > 0
         [
           found_ties,
-          ties.inject(0) { |a, v| a + (v.size**3 - v.size) / 12.0}
+          ties.inject(0) { |a, v| a + (v.size**3 - v.size) / 12.0 }
         ]
       end
 
@@ -85,7 +85,7 @@ module Benchmark
       def self.rank_sum(ranked, label)
         ranked
           .select { |elem| elem[1] == label }
-          .inject(0) {|rank_sum, elem| rank_sum + elem.last }
+          .inject(0) { |rank_sum, elem| rank_sum + elem.last }
       end
 
       def self.adjust_ties!(ranked)
@@ -93,7 +93,7 @@ module Benchmark
 
         ranked
           .group_by { |e| e.first }
-          .reject { |_,v| v.size < 2 }
+          .reject { |_, v| v.size < 2 }
           .each do |score, data|
             ties[score] = data.inject(0) do |sum, elem|
               sum + elem.last
