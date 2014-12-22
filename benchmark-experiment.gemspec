@@ -4,13 +4,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'benchmark/experiment/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'benchmark-experiment'
+  spec.name          = 'benchmark-lab'
   spec.version       = Benchmark::Experiment::VERSION
   spec.authors       = ['Christophe Philemotte']
   spec.email         = ['christophe.philemotte@8thcolor.com']
   spec.summary       = %q{Run Real Experiment and Calculate Non-Parametric Statistics.}
   spec.description   = %q{Run Real Experiment and Calculate Non-Parametric Statistics.}
-  spec.homepage      = 'https://github.com/toch/benchmark-experiment'
+  spec.homepage      = 'https://github.com/toch/benchmark-lab'
   spec.license       = 'GPLv3'
 
   spec.files         = `git ls-files -z`.split("\x0")
