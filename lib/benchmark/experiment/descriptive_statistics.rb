@@ -1,4 +1,3 @@
-
 module Benchmark
   module Experiment
     class DescriptiveStatistics
@@ -20,6 +19,20 @@ module Benchmark
 
       def interquartile_range
         @third_quartile - @first_quartile
+      end
+
+      def to_json(options = {})
+        {
+          'name' => name,
+          'sample' => sample,
+          'sample_size' => sample_size,
+          'minimum' => minimum,
+          'maximum' => maximum,
+          'first_quartile' => first_quartile,
+          'third_quartile' => third_quartile,
+          'median' => median,
+          'interquartile_range' => interquartile_range
+        }.to_json
       end
 
       private

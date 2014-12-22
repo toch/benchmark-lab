@@ -41,4 +41,19 @@ describe Benchmark::Experiment do
     results.size.must_equal 3
     # results.map(&:label).must_equal cases.keys
   end
+
+  it 'collects and stores the descriptive statistics into a JSON' do
+    times = 2
+    result = Benchmark.observe_and_summarize(times) do |x|
+      cases.each { |label, blk| x.report(label, &blk) }
+    end
+
+    items = JSON.parse(result)
+    items.size.must_equal 3
+    puts items.first.first['name'].must_equal 'utime'
+  end
+
+  it 'ranks multiple descriptive statistics into a JSON' do
+
+  end
 end

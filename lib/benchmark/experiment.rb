@@ -3,6 +3,8 @@ require 'benchmark/experiment/descriptive_statistics'
 require 'benchmark/experiment/mann_whitney_u_test'
 require 'benchmark/experiment/version'
 
+require 'json'
+
 module Benchmark
   class Sample
     include Enumerable
@@ -35,7 +37,7 @@ module Benchmark
       self
     end
 
-    def benchmark(sample_size)
+    def observe_and_summarize(sample_size)
       @list.each do |label, item, sample, stats|
         sample_size.times.each do
           sample << Benchmark.measure(label, &item)
@@ -73,13 +75,21 @@ module Benchmark
       return ranked.first, is_h0_rejected
     end
 
+    def observe_and_summarize(sample_size, &blk)
+      job = Job.new(0)
+      yield(job)
+      job.observe_and_summarize(sample_size)
+      all_stats = job.list.map { |label, _, _, stats| stats }
+      all_stats.to_json
+    end
+
     def experiment(sample_size, &blk)
       width = 0
       job = Job.new(width)
       yield(job)
       width = job.width + 1
 
-      job.benchmark(sample_size)
+      job.observe_and_summarize(sample_size)
 
       lines = []
       spacing = [0] * MEASURED_TIMES.size
