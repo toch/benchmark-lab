@@ -1,7 +1,7 @@
 module Benchmark
   module Experiment
     class DescriptiveStatistics
-      def initialize(sample, name ='')
+      def initialize(sample, name = '')
         # raise exception if empty sample
         @name = name
         @sample = sample.sort
@@ -49,12 +49,13 @@ module Benchmark
       def calculate_first_quartile_of(data)
         return calculate_median_of(data[0..(data.size / 2)]) if data.size.odd?
 
-        calculate_median_of(data[0..((data.size - 1)/ 2)])
+        calculate_median_of(data[0..((data.size - 1) / 2)])
       end
+
       def calculate_third_quartile_of(data)
         return calculate_median_of(data[(data.size / 2)..-1]) if data.size.odd?
 
-        calculate_median_of(data[(data.size/ 2)..-1])
+        calculate_median_of(data[(data.size / 2)..-1])
       end
 
     end

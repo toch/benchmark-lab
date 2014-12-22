@@ -1,17 +1,9 @@
 require_relative '../spec_helper'
 
 describe Benchmark::Experiment::MannWhitneyUTest do
-  let(:x) {
-    [19, 22, 16, 29, 24]
-  }
-
-  let(:y_no_ties) {
-    [20, 11, 17, 12]
-  }
-
-  let(:y_ties) {
-   [19, 20, 11, 17, 12] 
-  }
+  let(:x)         { [19, 22, 16, 29, 24] }
+  let(:y_no_ties) { [20, 11, 17, 12] }
+  let(:y_ties)    { [19, 20, 11, 17, 12] }
 
   it 'calculates U' do
     Benchmark::Experiment::MannWhitneyUTest::calculate_U(x, y_no_ties).must_equal [3.0, 17.0]
@@ -38,4 +30,3 @@ describe Benchmark::Experiment::MannWhitneyUTest do
     refute Benchmark::Experiment::MannWhitneyUTest::is_null_hypothesis_rejected?(0.9, 0.05)
   end
 end
-

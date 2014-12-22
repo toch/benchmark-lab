@@ -2,7 +2,7 @@ require_relative '../spec_helper'
 
 describe Benchmark::Experiment do
   let(:cases) do
-    n = 5000000
+    n = 5_000_000
     {
       'for:'    => proc { for i in 1..n; a = "1"; end },
       'times:'  => proc { n.times do   ; a = "1"; end },
