@@ -50,7 +50,7 @@ describe Benchmark::Experiment do
 
     items = JSON.parse(result)
     items.size.must_equal 3
-    puts items.first.first['name'].must_equal 'utime'
+    items.first.first['name'].must_equal 'utime'
   end
 
   it 'ranks multiple descriptive statistics into a JSON' do
