@@ -61,50 +61,40 @@ module Benchmark
         real: 'real'
       }
 
-    def rank(all_stats, alpha = 0.05)
-      ranked = all_stats.map do |stats|
-        stats.select { |stat| stat.name == :total }.first
-      end.sort_by { |stat| stat.median }
-      is_h0_rejected = true
-      if all_stats.size > 1
-        z = Benchmark::Experiment::MannWhitneyUTest::calculate_z(ranked.first.sample, ranked[1].sample)
-        p_value = Benchmark::Experiment::MannWhitneyUTest::calculate_probability_z(z)
-        is_h0_rejected = Benchmark::Experiment::MannWhitneyUTest::is_null_hypothesis_rejected?(p_value, alpha)
-      end
-
-      return ranked.first, is_h0_rejected
-    end
-
     def observe_and_summarize(sample_size, &blk)
       job = Job.new(0)
       yield(job)
       job.observe_and_summarize(sample_size)
-      all_stats = job.list.map { |label, _, _, stats| stats }
-      all_stats.to_json
+      all_stats = job.list.map{ |label, _, _, stats| [label, stats] }.to_h
+      all_stats.to_json 
     end
 
     def experiment(sample_size, &blk)
-      width = 0
-      job = Job.new(width)
-      yield(job)
-      width = job.width + 1
+      all_stats = JSON.parse(observe_and_summarize(sample_size, &blk))
+      print_stats(all_stats)
+      
+      best, is_the_best_significative = rank(all_stats)
 
-      job.observe_and_summarize(sample_size)
+      puts "The best \"#{best['label']}\" is #{is_the_best_significative ? '' : 'not '}significantly (95%) better (total time)."
+
+      all_stats
+    end
+
+    private
+
+    def print_stats(all_stats)
+      width = label_width(all_stats)
 
       lines = []
       spacing = [0] * MEASURED_TIMES.size
       tab = ' ' * 4
 
-      all_stats = []
-
-      job.list.each do |label, _, _, stats|
+      all_stats.each do |label, stats|
         line = ''
         line << label.ljust(width)
 
-        all_stats << stats
-
         stats.each_with_index do |stat, index|
-          value = "#{tab}[#{'%.2f' % stat.first_quartile},#{'%.2f' % stat.median},#{'%.2f' % stat.third_quartile}]"
+          value = "#{tab}[#{'%.2f' % stat['first_quartile']},#{'%.2f' % stat['median']},#{'%.2f' % stat['third_quartile']}]"
           spacing[index] = [spacing[index], value.length].minmax.last
           line << value
         end
@@ -119,12 +109,27 @@ module Benchmark
       print "\n"
 
       lines.each { |line| print line }
+    end
 
-      best, is_the_best_significative = rank(all_stats)
+    def label_width(all_stats)
+      label_widths = all_stats.map { |label, _| label.to_s.length }
+      label_widths.minmax.last
+    end
 
-      puts "The best \"#{best.name}\" is #{is_the_best_significative ? '' : 'not '}significantly (95%) better (total time)."
+    def rank(all_stats, alpha = 0.05)
+      ranked = all_stats.map do |label, stats|
+        total = stats.select{ |stat| stat['name'] == 'total' }.first
+        total['label'] = label
+        total
+      end.sort_by { |stat| stat['median'] }
+      is_h0_rejected = true
+      if all_stats.size > 1
+        z = Benchmark::Experiment::MannWhitneyUTest::calculate_z(ranked.first['sample'], ranked[1]['sample'])
+        p_value = Benchmark::Experiment::MannWhitneyUTest::calculate_probability_z(z)
+        is_h0_rejected = Benchmark::Experiment::MannWhitneyUTest::is_null_hypothesis_rejected?(p_value, alpha)
+      end
 
-      all_stats
+      return ranked.first, is_h0_rejected
     end
   end
 
