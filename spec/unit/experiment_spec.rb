@@ -53,7 +53,25 @@ describe Benchmark::Experiment do
     items['for:'].first['name'].must_equal 'utime'
   end
 
-  it 'ranks multiple descriptive statistics into a JSON' do
-
+  it 'ranks given stats' do
+    stats = {
+      'first' => [
+        {
+          'name' => 'total',
+          'median' => 10,
+          'sample' => [10] * 20
+        }
+      ],
+      'second' => [
+        {
+          'name' => 'total',
+          'median' => 20,
+          'sample' => [20] * 20
+        }
+      ]
+    }
+    best, is_h0_rejected = Benchmark.rank(stats)
+    assert is_h0_rejected
+    best['label'].must_equal 'first'
   end
 end

@@ -72,7 +72,7 @@ module Benchmark
     def experiment(sample_size, &blk)
       all_stats = JSON.parse(observe_and_summarize(sample_size, &blk))
       print_stats(all_stats)
-      
+
       best, is_the_best_significative = rank(all_stats)
 
       puts "The best \"#{best['label']}\" is #{is_the_best_significative ? '' : 'not '}significantly (95%) better (total time)."
@@ -80,6 +80,22 @@ module Benchmark
       all_stats
     end
 
+    def rank(all_stats, alpha = 0.05)
+      ranked = all_stats.map do |label, stats|
+        total = stats.select{ |stat| stat['name'] == 'total' }.first
+        total['label'] = label
+        total
+      end.sort_by { |stat| stat['median'] }
+      is_h0_rejected = true
+      if all_stats.size > 1
+        z = Benchmark::Experiment::MannWhitneyUTest::calculate_z(ranked.first['sample'], ranked[1]['sample'])
+        p_value = Benchmark::Experiment::MannWhitneyUTest::calculate_probability_z(z)
+        is_h0_rejected = Benchmark::Experiment::MannWhitneyUTest::is_null_hypothesis_rejected?(p_value, alpha)
+      end
+
+      return ranked.first, is_h0_rejected
+    end
+    
     private
 
     def print_stats(all_stats)
@@ -116,21 +132,6 @@ module Benchmark
       label_widths.minmax.last
     end
 
-    def rank(all_stats, alpha = 0.05)
-      ranked = all_stats.map do |label, stats|
-        total = stats.select{ |stat| stat['name'] == 'total' }.first
-        total['label'] = label
-        total
-      end.sort_by { |stat| stat['median'] }
-      is_h0_rejected = true
-      if all_stats.size > 1
-        z = Benchmark::Experiment::MannWhitneyUTest::calculate_z(ranked.first['sample'], ranked[1]['sample'])
-        p_value = Benchmark::Experiment::MannWhitneyUTest::calculate_probability_z(z)
-        is_h0_rejected = Benchmark::Experiment::MannWhitneyUTest::is_null_hypothesis_rejected?(p_value, alpha)
-      end
-
-      return ranked.first, is_h0_rejected
-    end
   end
 
   extend Benchmark::Experiment
