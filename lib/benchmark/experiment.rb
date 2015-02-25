@@ -69,6 +69,12 @@ module Benchmark
       all_stats.to_json 
     end
 
+    def aggregate_and_rank(jsons)
+      return if jsons.empty?   
+      all_stats = jsons.inject({}) { |elem, hsh| hsh.merge(elem) }
+      rank(all_stats)      
+    end
+
     def experiment(sample_size, &blk)
       all_stats = JSON.parse(observe_and_summarize(sample_size, &blk))
       print_stats(all_stats)
@@ -95,7 +101,10 @@ module Benchmark
 
       return ranked.first, is_h0_rejected
     end
-    
+
+    def iterative_experiment
+    end
+
     private
 
     def print_stats(all_stats)

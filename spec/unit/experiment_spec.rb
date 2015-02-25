@@ -53,6 +53,30 @@ describe Benchmark::Experiment do
     items['for:'].first['name'].must_equal 'utime'
   end
 
+  it 'aggregates several benchmark results and ranks them' do
+    stat_one = {
+      'first' => [
+        {
+          'name' => 'total',
+          'median' => 10,
+          'sample' => [10] * 20
+        }
+      ]
+    }
+    stat_two = {
+      'second' => [
+        {
+          'name' => 'total',
+          'median' => 20,
+          'sample' => [20] * 20
+        }
+      ]
+    }
+    best, is_h0_rejected = Benchmark.aggregate_and_rank([stat_one, stat_two])
+    assert is_h0_rejected
+    best['label'].must_equal 'first'
+  end
+
   it 'ranks given stats' do
     stats = {
       'first' => [
