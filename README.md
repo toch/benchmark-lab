@@ -1,6 +1,6 @@
 [![PullReview stats](https://www.pullreview.com/github/toch/benchmark-lab/badges/master.svg?)](https://www.pullreview.com/github/toch/benchmark-lab/reviews/master)
 
-# Benchmark Experiment
+# Benchmark Lab
 
 Run Real Experiment and Calculate Non-Parametric Statistics.
 
@@ -20,7 +20,7 @@ files, then put everything together and rank them
 ### Classic Usage
 
 ```Ruby
-require 'benchmark/experiment'
+require 'benchmark/lab'
 
 n = 5_000_000
 cases = {
@@ -40,7 +40,7 @@ end
 
 The output looks like the following:
 ```
-          user                system              total               real            
+          user                system              total               real
 for:      [0.77,0.77,0.78]    [0.00,0.00,0.00]    [0.77,0.77,0.78]    [0.77,0.77,0.78]
 times:    [0.74,0.74,0.74]    [0.00,0.00,0.00]    [0.74,0.74,0.74]    [0.74,0.74,0.74]
 upto:     [0.75,0.75,0.75]    [0.00,0.00,0.00]    [0.75,0.75,0.75]    [0.75,0.75,0.75]
@@ -50,7 +50,7 @@ The best "times:" is significantly (95%) better (total time).
 ### Iterative Usage
 
 ```Ruby
-require 'benchmark/experiment'
+require 'benchmark/lab'
 
 n = 5_000_000
 

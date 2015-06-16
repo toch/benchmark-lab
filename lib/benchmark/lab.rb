@@ -1,7 +1,7 @@
 require 'benchmark'
-require 'benchmark/experiment/descriptive_statistics'
-require 'benchmark/experiment/mann_whitney_u_test'
-require 'benchmark/experiment/version'
+require 'benchmark/lab/descriptive_statistics'
+require 'benchmark/lab/mann_whitney_u_test'
+require 'benchmark/lab/version'
 
 require 'json'
 
@@ -66,13 +66,13 @@ module Benchmark
       yield(job)
       job.observe_and_summarize(sample_size)
       all_stats = job.list.map{ |label, _, _, stats| [label, stats] }.to_h
-      all_stats.to_json 
+      all_stats.to_json
     end
 
     def aggregate_and_rank(jsons)
-      return if jsons.empty?   
+      return if jsons.empty?
       all_stats = jsons.inject({}) { |elem, hsh| hsh.merge(elem) }
-      rank(all_stats)      
+      rank(all_stats)
     end
 
     def experiment(sample_size, &blk)
