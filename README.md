@@ -4,6 +4,10 @@
 
 Run Real Experiment and Calculate Non-Parametric Statistics.
 
+## Requirements
+
+The ruby version required is at least `2.1`.
+
 ## Installation
 
 Install it yourself as:
