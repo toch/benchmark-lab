@@ -27,15 +27,15 @@ describe Benchmark::Experiment::DescriptiveStatistics do
     subject.maximum.must_equal 49
   end
 
-  it 'returns the median of the sample' do
-    subject.median.must_equal 40
-  end
-
   it 'returns the first quartile of the sample' do
     subject.first_quartile.must_equal 25.5
   end
 
-  it 'returns the first quartile of the sample' do
+  it 'returns the median of the sample' do
+    subject.median.must_equal 40
+  end
+
+  it 'returns the third quartile of the sample' do
     subject.third_quartile.must_equal 42.5
   end
 
